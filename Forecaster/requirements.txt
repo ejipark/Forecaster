@@ -1,0 +1,7 @@
+pandas
+joblib
+requests
+flask
+pickle
+seaborn
+scikit-learn==1.0.2

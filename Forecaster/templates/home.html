@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title> Air Travel Delay Predictor </title>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='home.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script>
+</head>
+
+<body>
+  <div class="grid-wrapper">
+
+    <div class="grid-header">
+      <a href="home"><img src="{{ url_for('static', filename='logo.jpg') }}" alt="logo" style="width: 430px;"></a>
+    </div>
+
+    <div class="grid-topnav">
+      <a href="home" style="background-color: blue;">Home</a>
+      <a href="about">About</a>
+      <a href="help">Help</a>
+      <a href="contact">Contact</a>
+    </div>
+
+    <div class="grid-sidebar">
+      <h3>Predict</h3>
+      <form action="/predict" method="post">
+        <div class="row">
+          <label for="Airport">Airport</label><br>
+          <select name="Airport" id="Airport">
+            <option value="ATL">ATL</option>
+            <option value="CLT">CLT</option>
+            <option value="DEN">DEN</option>
+            <option value="DFW">DFW</option>
+            <option value="JFK">JFK</option>
+            <option value="LAS">LAS</option>
+            <option value="LAX">LAX</option>
+            <option value="ORD">ORD</option>
+            <option value="SEA">SEA</option>
+            <option value="SFO">SFO</option>
+          </select>
+          {% if airport_code %}
+          <div id="code" style="display: none;">{{ airport_code }}</div>
+          <div id="sd" style="display: none;">{{ date }}</div>
+          {% endif %}
+        </div>
+        <div class="row">
+          <label for="dateInput">Date</label><br>
+          <input type="date" name="dateInput" id="dateInput" value="{{ date }}"><br>
+        </div>
+        <div class="button">
+          <button type="submit" name="action" value="actual">Submit</button>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Weather</h3>
+        <div class="row">
+          <label for="Precipitation">Precipitation (inches)</label><br>
+          <input type="number" step="0.001" name="Precipitation" id="Precipitation" value="{{ precip }}"><br>
+        </div>
+        <div class="row">
+          <label for="Temperature">Temperature (F)</label><br>
+          <input type="number" name="Temperature" id="Temperature" value="{{ temp }}"><br>
+        </div>
+        <div class="row">
+          <label for="DewPoint">Dew Point (F)</label><br>
+          <input type="number" name="DewPoint" id="DewPoint" value="{{ dewpt }}"><br>
+        </div>
+        <div class="row">
+          <label for="RelHumidity">Relative Humidity (%)</label><br>
+          <input type="number" name="RelHumidity" id="RelHumidity" value="{{ relh }}"><br>
+        </div>
+        <div class="row">
+          <label for="WindDirection">Wind Direction (degree)</label><br>
+          <input type="number" name="WindDirection" id="WindDirection" value="{{ wind_dir }}"><br>
+        </div>
+        <div class="row">
+          <label for="WindSpeed">Wind Speed (mph)</label><br>
+          <input type="number" step="0.1" name="WindSpeed" id="WindSpeed" value="{{ wind_speed }}"><br>
+        </div>
+        <div class="row">
+          <label for="Pressure">Pressure (mb)</label><br>
+          <input type="number" step="0.1" name="Pressure" id="Pressure" value="{{ pres }}"><br>
+        </div>
+        <div class="row">
+          <label for="Visibility">Visibility (miles)</label><br>
+          <input type="number" step="0.1" name="Visibility" id="Visibility" value="{{ visib }}"><br>
+        </div>
+        <div class="button">
+          <button type="submit" name="action" value="custom">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="grid-main">
+      <div class="grid-content">
+        {% if rate %}
+        <div class="block">
+          <div id="rate" style="display: none;">{{ rate }}</div>
+          <div>
+            <table>
+              <tr>
+                <td class="main_title">{{ airport_name }}</td>
+              </tr>
+              <tr>
+                {% if pred %}
+                <td class="main_middle">Customized Weather</td>
+                {% else %}
+                <td class="main_middle"> </td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td class="main_desc">Delay Probability</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="gauge">
+                    <div class="gauge__body">
+                      {% if pred %}
+                      <div class="gauge__fill" style="background: darkred;"></div>
+                      {% else %}
+                      <div class="gauge__fill" style="background: lightcoral"></div>
+                      {% endif %}
+                      <div class="gauge__cover">
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="block">
+          <div id="min_rate" style="display: none;">{{ min_rate }}</div>
+          <div id="rd" style="display: none;">{{ rec_date }}</div>
+          <div>
+            <table>
+              <tr>
+                <td class="sub_title">Recommended Date</td>
+              </tr>
+              <tr>
+                <td class="main_middle">{{ rec_date }}</td>
+              </tr>
+              <tr>
+                <td class="main_desc">Delay Probability</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="min_gauge">
+                    <div class="min_gauge__body">
+                      <div class="min_gauge__fill">
+                      </div>
+                      <div class="min_gauge__cover">
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <div id="ddtm" style="display: none;">{{ ddtm }}</div>
+          <div id="atl_rate" style="display: none;">{{ atl_rate }}</div>
+          <div id="lax_rate" style="display: none;">{{ lax_rate }}</div>
+          <div id="ord_rate" style="display: none;">{{ ord_rate }}</div>
+          <div id="dfw_rate" style="display: none;">{{ dfw_rate }}</div>
+          <div id="den_rate" style="display: none;">{{ den_rate }}</div>
+          <div id="jfk_rate" style="display: none;">{{ jfk_rate }}</div>
+          <div id="sfo_rate" style="display: none;">{{ sfo_rate }}</div>
+          <div id="las_rate" style="display: none;">{{ las_rate }}</div>
+          <div id="sea_rate" style="display: none;">{{ sea_rate }}</div>
+          <div id="clt_rate" style="display: none;">{{ clt_rate }}</div>
+          <div id="layout">
+            <div id="container">
+              <svg class="bar"></svg>
+            </div>
+          </div>
+        </div>
+        <div class="block">
+          <div id="plot"></div>
+        </div>
+        {% else %}
+        <div></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='home.js') }}"></script>
+
+</body>
+
+</html>

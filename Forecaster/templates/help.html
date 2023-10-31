@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> Air Travel Delay Predictor </title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='help.css') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="grid-wrapper">
+
+        <div class="grid-header">
+            <a href="home"><img src="{{ url_for('static', filename='logo.jpg') }}" alt="logo" style="width: 430px;"></a>
+        </div>
+
+        <div class="grid-topnav">
+            <a href="home">Home</a>
+            <a href="about">About</a>
+            <a href="help" style="background-color: blue;">Help</a>
+            <a href="contact">Contact</a>
+        </div>
+
+        <div class="grid-main">
+            <div class="grid-content">
+                <h1 style="text-align: center;">Help</h1>
+                <br>
+                <ul>
+                    <li>Step 1: Select the departure airport</li>
+                    <li>Step 2: Select the day of your upcoming flight (must be within 15 days)</li>
+                    <li>Step 3: Click the submit button located under the date</li>
+                    <li>Step 4: Check the delay probability shown in the box with the pink bar</li>
+                    <li>Step 5: Check the recommended date shown in the box with the blue bar</li>
+                    <li>Step 6: (optional) You can adjust any of the weather statistics shown by clicking the up or down arrows located in each box, or by manually entering decimals in a box and then selecting the submit button located under the visibility box</li>
+                    <li>Step 7: (optional) Hover over the vertical bar chart to view the delay probability difference of the hovered airport compared to the rest</li>
+                    <li>Step 8: (optional) Hover over the scatterplot circles to view the exact date and delay probability selected</li>
+                </ul>
+                <br>
+                <p><strong>This model should not be solely used to make decisions regarding flights, but should instead be used as an informative tool</strong></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> Air Travel Delay Predictor </title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='about.css') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="grid-wrapper">
+
+        <div class="grid-header">
+            <a href="home"><img src="{{ url_for('static', filename='logo.jpg') }}" alt="logo" style="width: 430px;"></a>
+        </div>
+
+        <div class="grid-topnav">
+            <a href="home">Home</a>
+            <a href="about" style="background-color: blue;">About</a>
+            <a href="help">Help</a>
+            <a href="contact">Contact</a>
+        </div>
+
+        <div class="grid-main">
+            <div class="grid-content">
+                <h1 style="text-align: center;">About</h1>
+                <br>
+                <p>This application was created by a group of Georgia Tech students for the class of CSE 6242. The purpose is to predict the probability that your flight for the selected airport and date will experience a delay. A flight is considered to be delayed if its departure time is more than 15 minutes after its scheduled departure time. The probability is based on all flights departing from the selected airport.</p>
+                <p>The weather forecast is from weatherbit.io and includes the daily weather up to 15 days from the current date. For this reason, delay predictions can only be made for 15 days in the future, and dates beyond that are unable to be selected in the "Date" dropdown. Other factors considered in predicting the probability of delay include the day of the week, month, and departing airport. The model was trained using flight and weather data from 2016-2019, and the model selected is a histogram based gradient boosting model. Due to changes in how airlines operate between 2020 and today, there is potential for delays to be underpredicted, as more delays unrelated to weather have been observed in 2022 than what was observed in prior years.</p>
+                <p>In addition, upon selecting the airport and the date, the application provides a recommended date of travel that predicts the lowest delay probability within the 15 days range. If there are multiple days that share the lowest delay probability, the application will choose the date that is closest to the current date. Also, users are able to customize weather data to get the delay probability of a flight from the selected airport and date.</p>
+                <h4>Additional Features</h4>
+                <p>There are two interactive graphs in the bottom row that users can utilize to compare the delay probablity among airports or dates. For the vertical bar chart, users can see the ranking of their selected airport and view the difference of the delay probability compared to other airports. For the scatterplot, users can view how the delay probability is layed out for all the dates that fit within the forecast range.</p>
+                <br>
+                <p><strong>This model should not be solely used to make decisions regarding flights, but should instead be used as an informative tool</strong></p>
+                <p><strong>Due to the uncertainty of weather forecasts, users should revisit the tool for more accurate predictions closer to their depature date</strong></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
